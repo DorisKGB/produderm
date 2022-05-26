@@ -85,6 +85,12 @@ class _VListClienteState extends State<VListCliente> {
             ),
           ],
         ),
+        onTap: () {
+          _bloc.viewClient(cliente);
+        },
+        onLongPress: () {
+          _bloc.crearVisita(cliente);
+        },
       ),
     );
     /*Column(

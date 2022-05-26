@@ -29,22 +29,51 @@ class _VAdminState extends State<VAdmin> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          //crossAxisAlignment: CrossAxisAlignment.start,
-          //mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            itemAdmin('Usuario', 'cmino', Icons.account_circle),
-            const SizedBox(height: 12),
-            itemAdmin('Nombre', 'Cristian Miño', Icons.badge),
-            const SizedBox(height: 12),
-            itemAdmin(
-                'Correo electrónico', 'cristian.mino@iclound.com', Icons.email),
-            const SizedBox(height: 12),
-            itemAdmin('Rol', 'Admin', Icons.admin_panel_settings),
-            const SizedBox(height: 12),
-            SWButton.elevated(
-              onPressed: _bloc.closeSesion,
-              child: const Text('Cerrar Sesion'),
+            Column(
+              //crossAxisAlignment: CrossAxisAlignment.start,
+              //mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Image(
+                  image: AssetImage('assets/images/logo.png'),
+                  height: 70,
+                ),
+                const SizedBox(height: 20),
+                itemAdmin('Usuario', 'cmino', Icons.account_circle),
+                const SizedBox(height: 12),
+                itemAdmin('Nombre', 'Cristian Miño', Icons.badge),
+                const SizedBox(height: 12),
+                itemAdmin('Correo electrónico', 'cristian.mino@iclound.com',
+                    Icons.email),
+                const SizedBox(height: 12),
+                itemAdmin('Rol', 'Admin', Icons.admin_panel_settings),
+                const SizedBox(height: 12),
+                SWButton.elevated(
+                  onPressed: _bloc.closeSesion,
+                  child: const Text('Cerrar Sesion'),
+                ),
+              ],
+            ),
+            Expanded(
+              child: SizedBox(
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Realizado @DARHU',
+                      style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          fontSize: 12,
+                          color: Colors.black.withOpacity(0.6)
+                          //fontWeight: FontWeight.bold,
+                          ),
+                    )
+                  ],
+                ),
+              ),
             )
           ],
         ),

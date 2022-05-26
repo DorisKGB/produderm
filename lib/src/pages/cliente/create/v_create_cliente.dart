@@ -34,71 +34,75 @@ class _VCreateClenteState extends State<VCreateClente> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Crear Cliente'),
+          title: _bloc.idIsNull()
+              ? const Text('Crear Cliente')
+              : const Text('Actualizar Cliente'),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(20),
+        body: Container(
+          padding: const EdgeInsets.all(8.0),
+          //margin: EdgeInsets.all(8.0),
           child: ListView(
             //mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const SizedBox(height: 16),
               SWInput(
                 outData: _bloc.outCodigo,
                 inData: _bloc.inCodigo,
                 labelText: 'Codigo',
                 textInputType: TextInputType.number,
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 16),
               SWInput(
                 outData: _bloc.outNombre,
                 inData: _bloc.inNombre,
                 labelText: 'Nombres',
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 16),
               SWInput(
                 outData: _bloc.outApellido,
                 inData: _bloc.inApellido,
                 labelText: 'Apellidos',
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 16),
               SWInput(
                 outData: _bloc.outCallePrincipal,
                 inData: _bloc.inCallePrincipal,
                 labelText: 'Calle principal',
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 16),
               SWInput(
                 outData: _bloc.outCalleSecundaria,
                 inData: _bloc.inCalleSecundaria,
                 labelText: 'Calle secundaria',
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 16),
               SWInput(
                 outData: _bloc.outEmail,
                 inData: _bloc.inEmail,
                 labelText: 'Email',
                 textInputType: TextInputType.emailAddress,
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 16),
               SWInput(
                 outData: _bloc.outTelefono,
                 inData: _bloc.inTelefono,
                 labelText: 'Teléfono',
                 textInputType: TextInputType.phone,
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 16),
               SWInput(
                 outData: _bloc.outRepresentante,
                 inData: _bloc.inRepresentante,
                 labelText: 'Representante',
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 16),
               SWInputButton<String>(
                 outData: _bloc.outBirthdayDate
                     .map((e) => _bloc.dateFormat.format(e)),
                 hint: "Fecha de cumpeaños",
                 action: _selectDate,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
               Row(
                 children: CTypeClient.values
                     .map((e) => Expanded(child: getSWRadioBtn(e)))
@@ -118,11 +122,13 @@ class _VCreateClenteState extends State<VCreateClente> {
                       return Container();
                     }
                   }),
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
               SWButton.elevated(
                 onPressed: _bloc.guardarCliente,
                 streamStatus: _bloc.outButtonStatus,
-                child: const Text('Guardar'),
+                child: _bloc.idIsNull()
+                    ? const Text('Crear Cliente')
+                    : const Text('Actualizar Cliente'),
               ),
             ],
           ),

@@ -2,7 +2,7 @@ class Api {
   static const String baseUrl = 'https://app.produderm.com.ec:9443';
 }
 
-enum EndPoint { login, listClients, listProducts, lisVisits }
+enum EndPoint { login, listClients, listProducts, lisVisits, admin }
 
 extension DetailEndPoint on EndPoint {
   String getPath() {
@@ -15,6 +15,8 @@ extension DetailEndPoint on EndPoint {
         return '${Api.baseUrl}/api/products';
       case EndPoint.lisVisits:
         return '${Api.baseUrl}/api/activities';
+      case EndPoint.admin:
+        return '${Api.baseUrl}/api/users/me';
     }
   }
 }

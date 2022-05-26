@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:produderm/core/entities/product.dart';
+import 'package:produderm/src/utils/widgets/sw_item_product.dart';
 
 import '../../../utils/bloc_pattern/bloc_provider.dart';
 import '../../../utils/widgets/sw_list_view.dart';
@@ -41,7 +42,9 @@ class _VListProductState extends State<VListProduct> {
   }
 
   Widget getItem(Product product, int index) {
-    return Card(
+    return SWItemProduct(product: product, index: index);
+
+    /*Card(
       elevation: 3,
       margin: const EdgeInsets.all(7),
       child: ListTile(
@@ -58,6 +61,6 @@ class _VListProductState extends State<VListProduct> {
               )
             : null,
       ),
-    );
+    );*/
   }
 }

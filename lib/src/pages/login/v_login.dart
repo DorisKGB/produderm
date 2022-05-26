@@ -38,6 +38,8 @@ class _VLoginState extends State<VLogin> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          //'assets/images/logo.png',
+          const Image(image: AssetImage('assets/images/logo.png'), height: 70),
           const Text('Ingrese Usuario y contraseña'),
           const SizedBox(height: 8),
           SWInput(
