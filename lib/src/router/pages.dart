@@ -3,7 +3,7 @@ enum Pages {
   main,
   createCliente,
   createVisit,
-  listProduct,
+  selectProduct,
 }
 
 extension PagesExtension on Pages {
@@ -17,8 +17,8 @@ extension PagesExtension on Pages {
         return "/create_cliente";
       case Pages.createVisit:
         return "/create_visit";
-      case Pages.listProduct:
-        return "/list-product";
+      case Pages.selectProduct:
+        return "/select-product";
     }
   }
 
@@ -32,8 +32,8 @@ extension PagesExtension on Pages {
         return "create-ciente";
       case Pages.createVisit:
         return "create-visit";
-      case Pages.listProduct:
-        return "list-product";
+      case Pages.selectProduct:
+        return "select-product";
     }
   }
 }

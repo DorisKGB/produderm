@@ -1,6 +1,8 @@
 import 'package:produderm/application/repository/r_visit.dart';
+import 'package:produderm/infraestructure/r_admin_imp.dart';
 import 'package:produderm/infraestructure/r_visit_imp.dart';
 
+import '../../application/repository/r_admin.dart';
 import '../../application/repository/r_client.dart';
 import '../../application/repository/r_product.dart';
 import '../../application/repository/r_user.dart';
@@ -18,4 +20,5 @@ class ServiceLocator {
   RClient get rClient => RClientImp(rUserLocal);
   RProduct get rProduct => RProductImp(rUserLocal);
   RVisit get rVisit => RVisitImp(rUserLocal);
+  RAdmin get rAmin => RAdminImp(rUserLocal);
 }

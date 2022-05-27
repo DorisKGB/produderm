@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:produderm/src/pages/producto/list_product/bloc/p_list_product.dart';
 
 import '../../core/entities/cliente.dart';
 import '../bloc_application/b_application.dart';
 import '../pages/cliente/create/bloc/p_create_cliente.dart';
 import '../pages/login/bloc/p_login.dart';
 import '../pages/main/bloc/p_main.dart';
+import '../pages/producto/select_product/bloc/p_select_product.dart';
+import '../pages/visit/create_visit/bloc/b_create_visit.dart';
 import '../pages/visit/create_visit/bloc/p_create_visit.dart';
 import '../utils/bloc_pattern/bloc_provider.dart';
 import '../utils/service_locator.dart';
@@ -33,7 +34,7 @@ class MyRouter {
                 rClient: locator.rClient,
                 rProduct: locator.rProduct,
                 rVisit: locator.rVisit,
-                rUserLocal: locator.rUserLocal,
+                rAdmin: locator.rAmin,
               )),
       GoRoute(
         name: Pages.createCliente.getKey(),
@@ -55,19 +56,18 @@ class MyRouter {
           return PCreateVisit(
             bApplication: BlocProvider.of<BApplication>(context),
             cliente: cliente,
-            rProduct: locator.rProduct,
-            //rClient:  locator.rClient,
+            rVisit: locator.rVisit,
           );
         },
       ),
       GoRoute(
-        name: Pages.listProduct.getKey(),
-        path: Pages.listProduct.getPath(),
+        name: Pages.selectProduct.getKey(),
+        path: Pages.selectProduct.getPath(),
         builder: (BuildContext context, GoRouterState state) {
-          //final Cliente cliente = state.extra as Cliente;
-          return PListProduct(
+          final BCreateVisit bloc = state.extra as BCreateVisit;
+          return PSelectProduct(
             bApplication: BlocProvider.of<BApplication>(context),
-            //cliente: cliente,
+            bCreateVisit: bloc,
             rProduct: locator.rProduct,
             //rClient:  locator.rClient,
           );

@@ -34,7 +34,7 @@ class EClienteFromData extends MapedorService<dynamic, Cliente> {
 class EClienteToParams extends MapedorService<Cliente, Map<String, dynamic>> {
   @override
   Map<String, dynamic> map(Cliente item) {
-    var params = <String, dynamic>{};
+    final params = <String, dynamic>{};
     params['code'] = item.code;
     params['first_name'] = item.firstName;
     params['last_name'] = item.lastName;

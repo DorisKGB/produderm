@@ -1,25 +1,33 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
-import 'package:produderm/application/repository/r_product.dart';
-import 'package:produderm/core/entities/product.dart';
+import 'package:produderm/application/repository/r_visit.dart';
+import 'package:produderm/core/entities/details_activity.dart';
+import 'package:produderm/core/entities/visit.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../../../core/entities/cliente.dart';
 import '../../../../bloc_application/b_application.dart';
+import '../../../../models/m_action_view.dart';
 import '../../../../router/pages.dart';
 import '../../../../utils/bloc_pattern/bloc_base.dart';
+import '../../../../utils/mixin/action_view_screen.dart';
+import '../../../../utils/mixin/manage_button.dart';
 import '../../../../utils/validators/validator_transforms.dart';
+import '../../../../utils/widgets/sw_button.dart';
 
-class BCreateVisit with ValidatorTransForms implements BlocBase {
-  BCreateVisit(this._bApplication, this.cliente, this._rProduct) {
+class BCreateVisit
+    with ManageButton, ValidatorTransForms, MixActionViewStream
+    implements BlocBase {
+  BCreateVisit(this._bApplication, this.cliente, this._rVisit) {
     inDate(dateFormat.format(initialDate));
     inNombre('${cliente.firstName} ${cliente.lastName}');
-    getProducts();
+    inDetailVisit([]);
+    inButtonStatus(ButtonStatus.active);
   }
   final BApplication _bApplication;
   final Cliente cliente;
-  final RProduct _rProduct;
+  final RVisit _rVisit;
 
   ///==================== STREAM
   DateTime initialDate = DateTime.now();
@@ -49,30 +57,54 @@ class BCreateVisit with ValidatorTransForms implements BlocBase {
       _commentary.stream.transform(validateName(translate));
   Function(String) get inCommentary => _commentary.sink.add;
 
-  ///==================== STREAM NUMERO PRODUCTO
-  final BehaviorSubject<String> _numProduct = BehaviorSubject<String>();
-  Stream<String> get outNumProduct => _numProduct.stream;
-  Function(String) get inNumProduct => _numProduct.sink.add;
-
   ///==================== STREAM LISTA DE PRODUCTOS
-  final BehaviorSubject<List<Product>> _product =
-      BehaviorSubject<List<Product>>(); // Se crea el stream
-  Stream<List<Product>> get outProducts => _product.stream; // salida
-  Function(List<Product>) get inProducts => _product.sink.add;
-
-  Future<void> getProducts() async {
+  final BehaviorSubject<List<DetailsVisit>> _detailVisit =
+      BehaviorSubject<List<DetailsVisit>>(); // Se crea el stream
+  Stream<List<DetailsVisit>> get outDetailVisit =>
+      _detailVisit.stream; // salida
+  Function(List<DetailsVisit>) get inDetailVisit => _detailVisit.sink.add;
+  List<DetailsVisit> get detailList => _detailVisit.valueOrNull ?? [];
+  // agrega a la tuberia de lista de detalles
+  Future<void> addDetailVisit(DetailsVisit detailsVisit) async {
     try {
-      List<Product> product = await _rProduct.listProduct();
-      if (!_product.isClosed) {
-        inProducts(product);
+      if (detailList.isEmpty) {
+        inDetailVisit([detailsVisit]);
+      } else {
+        inDetailVisit((detailList..add(detailsVisit)));
       }
     } catch (e, st) {
-      _product.addError(e.toString());
+      _detailVisit.addError(e.toString());
     }
   }
 
+  // envia a la vista para seleccionar los productos
   void addProduct() {
-    navigator.push(Pages.listProduct.getPath());
+    navigator.push(Pages.selectProduct.getPath(), extra: this);
+  }
+
+  void removeDetailVisit(int i) {
+    detailList.removeAt(i);
+    inDetailVisit(detailList);
+  }
+
+  Future<void> createVisit() async {
+    try {
+      Visit visita = Visit()
+        ..cliente = cliente
+        ..date = initialDate
+        ..comment = _commentary.valueOrNull
+        ..totalSale = double.tryParse(_totalSales.valueOrNull ?? '')
+        ..totalCharge = double.tryParse(_totalCharge.valueOrNull ?? '')
+        ..details = _detailVisit.valueOrNull;
+      inButtonStatus(ButtonStatus.progress);
+      await _rVisit.createVisit(visita);
+      inButtonStatus(ButtonStatus.active);
+      inView(MActionView.messageError('Se registró la visita'));
+      navigator.pop();
+    } catch (e, st) {
+      inButtonStatus(ButtonStatus.active);
+      inView(MActionView.messageError(e.toString()));
+    }
   }
 
   @override
@@ -82,8 +114,7 @@ class BCreateVisit with ValidatorTransForms implements BlocBase {
     _totalCharge.close();
     _totalSales.close();
     _commentary.close();
-    _product.close();
-    _numProduct.close();
+    _detailVisit.close();
   }
 
   @override

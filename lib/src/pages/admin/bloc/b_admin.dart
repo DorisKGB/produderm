@@ -1,23 +1,45 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:produderm/src/bloc_application/b_application.dart';
-import 'package:produderm/src/utils/bloc_pattern/bloc_base.dart';
+import 'package:rxdart/rxdart.dart';
 
-import '../../../../application/repository/r_user_local.dart';
+import '../../../../application/repository/r_admin.dart';
+import '../../../../core/entities/admin.dart';
+import '../../../bloc_application/b_application.dart';
+import '../../../models/m_action_view.dart';
 import '../../../router/pages.dart';
+import '../../../utils/bloc_pattern/bloc_base.dart';
+import '../../../utils/mixin/action_view_screen.dart';
 
-class BAdmin implements BlocBase {
-  BAdmin(this._bApplication, this._rUserLocal);
+class BAdmin with MixActionViewStream implements BlocBase {
+  BAdmin(this._bApplication, this._rAdmin) {
+    getAdmin();
+  }
   final BApplication _bApplication;
-  final RUserLocal _rUserLocal;
+  final RAdmin _rAdmin;
+
+  final BehaviorSubject<Admin> _admin =
+      BehaviorSubject<Admin>(); // Se crea el stream
+  Stream<Admin> get outAdmin => _admin.stream; // salida
+  Function(Admin) get inAdmin => _admin.sink.add;
+  Admin get admin => _admin.valueOrNull ?? Admin();
+
+  Future<void> getAdmin() async {
+    try {
+      inAdmin(await _rAdmin.getAdmin());
+    } catch (e, st) {
+      inView(MActionView.messageError(e.toString()));
+    }
+  }
 
   void closeSesion() {
-    _rUserLocal.removeToken();
+    _rAdmin.closeSesion();
     navigator.go(Pages.signIn.getPath());
   }
 
   @override
-  void dispose() {}
+  void dispose() {
+    _admin.close();
+  }
 
   @override
   GoRouter get navigator => _bApplication.navigator;

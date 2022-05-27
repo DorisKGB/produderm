@@ -15,8 +15,7 @@ class RClientImp implements RClient {
   Future<List<Cliente>> listClient() async {
     try {
       final String basicAuth = 'Bearer ${(await rUserLocal.getToken()).token}';
-      Response<dynamic> response = await Dio().get(
-          EndPoint.listClients.getPath(),
+      Response<dynamic> response = await Dio().get(EndPoint.clients.getPath(),
           options:
               Options(headers: <String, String>{'authorization': basicAuth}));
       return EClienteFromData().transformList(
@@ -32,8 +31,7 @@ class RClientImp implements RClient {
   Future<bool> createClient(Cliente cliente) async {
     try {
       final String basicAuth = 'Bearer ${(await rUserLocal.getToken()).token}';
-      Response<dynamic> response = await Dio().post(
-          EndPoint.listClients.getPath(),
+      Response<dynamic> response = await Dio().post(EndPoint.clients.getPath(),
           options:
               Options(headers: <String, String>{'authorization': basicAuth}),
           data: EClienteToParams().transform(cliente));
@@ -50,7 +48,7 @@ class RClientImp implements RClient {
     try {
       final String basicAuth = 'Bearer ${(await rUserLocal.getToken()).token}';
       Response<dynamic> response = await Dio().put(
-          '${EndPoint.listClients.getPath()}/${cliente.id}',
+          '${EndPoint.clients.getPath()}/${cliente.id}',
           options:
               Options(headers: <String, String>{'authorization': basicAuth}),
           data: EClienteToParams().transform(cliente));

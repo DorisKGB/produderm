@@ -11,7 +11,6 @@ import '../../../../../core/catalog/enum/c_cliente_type.dart';
 import '../../../../../core/catalog/enum/c_pharmacy_type.dart';
 import '../../../../bloc_application/b_application.dart';
 import '../../../../models/m_action_view.dart';
-import '../../../../router/pages.dart';
 import '../../../../utils/bloc_pattern/bloc_base.dart';
 import '../../../../utils/mixin/action_view_screen.dart';
 import '../../../../utils/mixin/manage_button.dart';

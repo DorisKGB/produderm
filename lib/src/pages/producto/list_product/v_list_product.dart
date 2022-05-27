@@ -42,25 +42,6 @@ class _VListProductState extends State<VListProduct> {
   }
 
   Widget getItem(Product product, int index) {
-    return SWItemProduct(product: product, index: index);
-
-    /*Card(
-      elevation: 3,
-      margin: const EdgeInsets.all(7),
-      child: ListTile(
-        minVerticalPadding: 12,
-        //isThreeLine: true,
-        title: Text(
-            '${product.code} - ${product.name} ${product.presentation ?? ''}',
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-        subtitle: Text('PVF: \$${product.pvf}   PVP: \$${product.pvp}'),
-        trailing: (product.isProduct == false)
-            ? const Icon(
-                Icons.vaccines,
-                color: Colors.red,
-              )
-            : null,
-      ),
-    );*/
+    return SWItemProduct(data: product, index: index);
   }
 }

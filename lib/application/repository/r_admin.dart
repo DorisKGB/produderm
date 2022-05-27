@@ -1,3 +1,6 @@
-abstract class RClient {
-  Future<void> listClient();
+import '../../core/entities/admin.dart';
+
+abstract class RAdmin {
+  Future<Admin> getAdmin();
+  Future<void> closeSesion();
 }
