@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:go_router/go_router.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:produderm/application/repository/r_client.dart';
@@ -32,6 +34,15 @@ class BListClient implements BlocBase {
 
   void addClient() {
     navigator.push(Pages.createCliente.getPath());
+  }
+
+  void viewClient(Cliente cliente) {
+    navigator.push(Pages.createCliente.getPath(), extra: cliente);
+  }
+
+  crearVisita(Cliente cliente) {
+    navigator.push(Pages.createVisit.getPath(), extra: cliente);
+    //navigator.push(Pages.createVisit.getPath());
   }
 
   @override

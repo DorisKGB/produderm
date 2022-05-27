@@ -5,7 +5,7 @@ import 'details_activity.dart';
 class Visit {
   String? id;
   Cliente? cliente;
-  String? date;
+  DateTime? date;
   String? lat;
   String? lon;
   String? comment;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:produderm/core/entities/admin.dart';
 
 import '../../utils/bloc_pattern/bloc_provider.dart';
 import '../../utils/widgets/sw_button.dart';
@@ -19,6 +20,7 @@ class _VAdminState extends State<VAdmin> {
     super.initState();
     // Busca en el arbol al BLogin para acceder a las propiedades de Blogin
     _bloc = BlocProvider.of<BAdmin>(context);
+    _bloc.initActionView(context: context);
   }
 
   @override
@@ -29,22 +31,59 @@ class _VAdminState extends State<VAdmin> {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          //crossAxisAlignment: CrossAxisAlignment.start,
-          //mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            itemAdmin('Usuario', 'cmino', Icons.account_circle),
-            const SizedBox(height: 12),
-            itemAdmin('Nombre', 'Cristian Miño', Icons.badge),
-            const SizedBox(height: 12),
-            itemAdmin(
-                'Correo electrónico', 'cristian.mino@iclound.com', Icons.email),
-            const SizedBox(height: 12),
-            itemAdmin('Rol', 'Admin', Icons.admin_panel_settings),
-            const SizedBox(height: 12),
-            SWButton.elevated(
-              onPressed: _bloc.closeSesion,
-              child: const Text('Cerrar Sesion'),
+            StreamBuilder<Admin>(
+                stream: _bloc.outAdmin,
+                initialData: _bloc.admin,
+                builder: (context, snapshot) {
+                  return Column(
+                    //crossAxisAlignment: CrossAxisAlignment.start,
+                    //mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 20),
+                      const Image(
+                        image: AssetImage('assets/images/logo.png'),
+                        height: 70,
+                      ),
+                      const SizedBox(height: 20),
+                      itemAdmin('Usuario', snapshot.data?.userName,
+                          Icons.account_circle),
+                      const SizedBox(height: 12),
+                      itemAdmin('Nombre', snapshot.data?.name, Icons.badge),
+                      const SizedBox(height: 12),
+                      itemAdmin('Correo electrónico', snapshot.data?.email,
+                          Icons.email),
+                      const SizedBox(height: 12),
+                      itemAdmin('Rol', snapshot.data?.role,
+                          Icons.admin_panel_settings),
+                      const SizedBox(height: 12),
+                      SWButton.elevated(
+                        onPressed: _bloc.closeSesion,
+                        child: const Text('Cerrar Sesion'),
+                      ),
+                    ],
+                  );
+                }),
+            Expanded(
+              child: SizedBox(
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Power by DARHU',
+                      style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          fontSize: 12,
+                          color: Colors.black.withOpacity(0.6)
+                          //fontWeight: FontWeight.bold,
+                          ),
+                    )
+                  ],
+                ),
+              ),
             )
           ],
         ),
@@ -52,7 +91,7 @@ class _VAdminState extends State<VAdmin> {
     );
   }
 
-  Widget itemAdmin(String titulo, String subtitulo, IconData icono) {
+  Widget itemAdmin(String titulo, String? subtitulo, IconData icono) {
     return Row(
       children: [
         Icon(icono, color: Colors.grey),
@@ -67,7 +106,7 @@ class _VAdminState extends State<VAdmin> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text(subtitulo)
+            Text(subtitulo ?? '')
           ],
         ),
       ],

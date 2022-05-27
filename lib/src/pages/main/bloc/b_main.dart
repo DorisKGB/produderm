@@ -4,19 +4,19 @@ import 'package:produderm/application/repository/r_product.dart';
 import 'package:produderm/application/repository/r_visit.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../../../application/repository/r_admin.dart';
 import '../../../../application/repository/r_client.dart';
-import '../../../../application/repository/r_user_local.dart';
 import '../../../bloc_application/b_application.dart';
 import '../../../utils/bloc_pattern/bloc_base.dart';
 
 class BMain implements BlocBase {
-  BMain(this.bApplication, this.rClient, this.rProduct, this.rVisit,
-      this.rUserLocal);
+  BMain(
+      this.bApplication, this.rClient, this.rProduct, this.rVisit, this.rAdmin);
   final BApplication bApplication;
   final RClient rClient;
   final RProduct rProduct;
   final RVisit rVisit;
-  final RUserLocal rUserLocal;
+  final RAdmin rAdmin;
   final BehaviorSubject<int> _selectedIndex = BehaviorSubject<int>(); // tuberia
   Stream<int> get outSelectedIndex => _selectedIndex.stream; // salida
   Function(int) get inSelectedIndex => _selectedIndex.sink.add;

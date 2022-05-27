@@ -20,7 +20,7 @@ import '../../../../utils/widgets/sw_button.dart';
 class BCreateCliente
     with ManageButton, ValidatorTransForms, MixActionViewStream
     implements BlocBase {
-  BCreateCliente(this._bApplication, this._rClient) {
+  BCreateCliente(this._bApplication, this._rClient, this.cliente) {
     initManageButton([
       outCodigo,
       outNombre,
@@ -34,11 +34,16 @@ class BCreateCliente
       outClientType,
       //outPharmacyType,
     ]);
-    inClientType(CTypeClient.farmacia);
-    inPharmacyType(CPharmacyType.cadena);
+    if (idIsNull()) {
+      inClientType(CTypeClient.farmacia);
+      inPharmacyType(CPharmacyType.cadena);
+    } else {
+      viewClient();
+    }
   }
   final BApplication _bApplication;
   final RClient _rClient;
+  final Cliente? cliente;
 
   ///==================== STREAM CODIGO
   final BehaviorSubject<String> _codigo = BehaviorSubject<String>();
@@ -115,8 +120,55 @@ class BCreateCliente
   Function(CPharmacyType) get inPharmacyType => _pharmacyType.sink.add;
   CPharmacyType get pharmacyType =>
       _pharmacyType.valueOrNull ?? CPharmacyType.cadena; //OBTIENE EL VALOR
-//
+
+  void viewClient() {
+    inCodigo(cliente!.code ?? '');
+    inNombre(cliente!.firstName ?? '');
+    inApellido(cliente!.lastName ?? '');
+    inCallePrincipal(cliente!.principalAddress ?? '');
+    inCalleSecundaria(cliente!.secondaryAddress ?? '');
+    inEmail(cliente!.email ?? '');
+    inTelefono(cliente!.phones?.first ?? '');
+    inRepresentante(cliente!.owner ?? '');
+    inBirthdayDate(cliente!.birthday ?? initialDate);
+    inClientType(cliente!.type ?? CTypeClient.medico);
+    if (cliente?.type == CTypeClient.farmacia) {
+      inPharmacyType(cliente!.pharmacyType!);
+    }
+  }
+
+  bool idIsNull() {
+    if (cliente?.id == null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+//metodo para guardar o actualizar cliente
   Future<void> guardarCliente() async {
+    Cliente cliente1 = setDataForSave();
+    String mensage = '';
+    try {
+      inButtonStatus(ButtonStatus.progress);
+      if (idIsNull()) {
+        await _rClient.createClient(cliente1);
+        mensage = 'creo';
+      } else {
+        await _rClient.updateClient(cliente1);
+        mensage = 'actualizó';
+      }
+      // Para activar el boton
+      inButtonStatus(ButtonStatus.active);
+      inView(MActionView.messageError('Se $mensage cliente'));
+      navigator.pop();
+    } catch (e, st) {
+      inButtonStatus(ButtonStatus.active);
+      inView(MActionView.messageError(e.toString()));
+    }
+  }
+
+  Cliente setDataForSave() {
     Cliente cliente1 = Cliente()
       ..code = _codigo.valueOrNull
       ..firstName = _nombre.valueOrNull
@@ -127,18 +179,14 @@ class BCreateCliente
       ..type = _clientType.valueOrNull
       ..phones = [_telefono.valueOrNull]
       ..owner = _representante.valueOrNull
-      ..birthday = _birthdayDate.valueOrNull
-      ..pharmacyType = _pharmacyType.valueOrNull;
-    try {
-      inButtonStatus(ButtonStatus.progress); // Para activar el boton
-      await _rClient.createlient(cliente1);
-      inButtonStatus(ButtonStatus.active);
-      inView(MActionView.messageError('Se creo cliente'));
-      navigator.pop();
-    } catch (e, st) {
-      inButtonStatus(ButtonStatus.active);
-      inView(MActionView.messageError(e.toString()));
+      ..birthday = _birthdayDate.valueOrNull;
+    if (!idIsNull()) {
+      cliente1.id = cliente!.id;
     }
+    if (_clientType.valueOrNull == CTypeClient.farmacia) {
+      cliente1.pharmacyType = _pharmacyType.valueOrNull;
+    }
+    return cliente1;
   }
 
   @override

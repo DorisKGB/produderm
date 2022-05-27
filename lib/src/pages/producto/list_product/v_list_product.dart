@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:produderm/core/entities/product.dart';
+import 'package:produderm/src/utils/widgets/sw_item_product.dart';
 
 import '../../../utils/bloc_pattern/bloc_provider.dart';
 import '../../../utils/widgets/sw_list_view.dart';
@@ -41,23 +42,6 @@ class _VListProductState extends State<VListProduct> {
   }
 
   Widget getItem(Product product, int index) {
-    return Card(
-      elevation: 3,
-      margin: const EdgeInsets.all(7),
-      child: ListTile(
-        minVerticalPadding: 12,
-        //isThreeLine: true,
-        title: Text(
-            '${product.code} - ${product.name} ${product.presentation ?? ''}',
-            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-        subtitle: Text('PVF: \$${product.pvf}   PVP: \$${product.pvp}'),
-        trailing: (product.isProduct == false)
-            ? const Icon(
-                Icons.vaccines,
-                color: Colors.red,
-              )
-            : null,
-      ),
-    );
+    return SWItemProduct(data: product, index: index);
   }
 }

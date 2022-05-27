@@ -33,7 +33,7 @@ class _VMainState extends State<VMain> {
       PListVisit(bApplication: _bloc.bApplication, rVisit: _bloc.rVisit),
       PAdmin(
         bApplication: _bloc.bApplication,
-        rUserLocal: _bloc.rUserLocal,
+        rAdmin: _bloc.rAdmin,
       )
     ];
   }

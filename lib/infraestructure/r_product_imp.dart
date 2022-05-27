@@ -14,8 +14,7 @@ class RProductImp implements RProduct {
   Future<List<Product>> listProduct() async {
     try {
       final String basicAuth = 'Bearer ${(await rUserLocal.getToken()).token}';
-      Response<dynamic> response = await Dio().get(
-          EndPoint.listProducts.getPath(),
+      Response<dynamic> response = await Dio().get(EndPoint.products.getPath(),
           options:
               Options(headers: <String, String>{'authorization': basicAuth}));
       return EProductFromData().transformList(
