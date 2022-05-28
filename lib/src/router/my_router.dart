@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:produderm/core/entities/visit.dart';
 
 import '../../core/entities/cliente.dart';
 import '../bloc_application/b_application.dart';
@@ -40,11 +41,12 @@ class MyRouter {
         name: Pages.createCliente.getKey(),
         path: Pages.createCliente.getPath(),
         builder: (BuildContext context, GoRouterState state) {
-          final Cliente? cliente = state.extra as Cliente?;
+          Map<String, dynamic> parametros = state.extra as Map<String, dynamic>;
+          //final Cliente? cliente = state.extra as Cliente?;
           return PCreateCliente(
             bApplication: BlocProvider.of<BApplication>(context),
             rClient: locator.rClient,
-            cliente: cliente,
+            parametros: parametros,
           );
         },
       ),
@@ -52,11 +54,12 @@ class MyRouter {
         name: Pages.createVisit.getKey(),
         path: Pages.createVisit.getPath(),
         builder: (BuildContext context, GoRouterState state) {
-          final Cliente cliente = state.extra as Cliente;
+          //final Visit visit = state.extra as Visit;
+          Map<String, dynamic> parametros = state.extra as Map<String, dynamic>;
           return PCreateVisit(
             bApplication: BlocProvider.of<BApplication>(context),
-            cliente: cliente,
             rVisit: locator.rVisit,
+            parametros: parametros,
           );
         },
       ),

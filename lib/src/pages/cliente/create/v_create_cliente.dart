@@ -61,7 +61,7 @@ class _VCreateClenteState extends State<VCreateClente> {
               SWInput(
                 outData: _bloc.outApellido,
                 inData: _bloc.inApellido,
-                labelText: 'Apellidos',
+                labelText: 'Apellidos (opcional)',
               ),
               const SizedBox(height: 16),
               SWInput(
@@ -93,7 +93,7 @@ class _VCreateClenteState extends State<VCreateClente> {
               SWInput(
                 outData: _bloc.outRepresentante,
                 inData: _bloc.inRepresentante,
-                labelText: 'Representante',
+                labelText: 'Representante (opcional)',
               ),
               const SizedBox(height: 16),
               SWInputButton<String>(

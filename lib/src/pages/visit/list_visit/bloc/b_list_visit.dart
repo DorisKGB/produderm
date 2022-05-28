@@ -8,6 +8,7 @@ import 'package:rxdart/rxdart.dart';
 import '../../../../../application/repository/r_visit.dart';
 import '../../../../../core/entities/visit.dart';
 import '../../../../bloc_application/b_application.dart';
+import '../../../../router/pages.dart';
 import '../../../../utils/bloc_pattern/bloc_base.dart';
 
 class BListVisit implements BlocBase {
@@ -24,6 +25,7 @@ class BListVisit implements BlocBase {
       BehaviorSubject<List<Visit>>(); // Se crea el stream
   Stream<List<Visit>> get outVisits => _visits.stream; // salida
   Function(List<Visit>) get inVisits => _visits.sink.add;
+  List<Visit> get visitList => _visits.valueOrNull ?? [];
 
   Future<void> getVisits(DateTime date) async {
     try {
@@ -35,6 +37,11 @@ class BListVisit implements BlocBase {
       log(st.toString());
       _visits.addError(e.toString());
     }
+  }
+
+  void viewVisit(Visit visit) {
+    navigator.push(Pages.createVisit.getPath(),
+        extra: {'visit': visit, 'bloc': this});
   }
 
   @override

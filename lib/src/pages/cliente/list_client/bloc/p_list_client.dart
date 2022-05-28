@@ -11,7 +11,6 @@ class PListCliente extends StatelessWidget {
       : super(key: key);
   final BApplication bApplication;
   final RClient rClient;
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider<BListClient>(

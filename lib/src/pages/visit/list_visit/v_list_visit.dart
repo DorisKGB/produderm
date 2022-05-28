@@ -57,7 +57,8 @@ class _VListVisitState extends State<VListVisit> {
               Text('Productos Entregados: ${(visit.details?.length)}'),
             ],
           ),
-          trailing: Text(_bloc.dateFormat.format(_bloc.date))),
+          trailing: Text(_bloc.dateFormat.format(_bloc.date)),
+          onTap: () => {_bloc.viewVisit(visit)}),
     );
   }
 }
