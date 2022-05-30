@@ -23,7 +23,7 @@ class BCreateVisit
     inButtonStatus(ButtonStatus.active);
     visit = parametros['visit'];
     bListVisit = parametros['bloc'];
-    inNombre('${visit?.cliente?.firstName} ${visit?.cliente?.lastName}');
+    inNombre('${visit?.cliente?.firstName} ${visit?.cliente?.lastName ?? ''}');
     if (idIsNull()) {
       inDate(dateFormat.format(initialDate));
       inDetailVisit([]);
@@ -55,18 +55,20 @@ class BCreateVisit
 
   ///==================== STREAM TOTAL COBRO
   final BehaviorSubject<String> _totalCharge = BehaviorSubject<String>();
-  Stream<String> get outTotalCharge => _totalCharge.stream;
+  Stream<String> get outTotalCharge =>
+      _totalCharge.stream.transform(validateDecimal(translate));
   Function(String) get inTotalCharge => _totalCharge.sink.add;
 
   ///==================== STREAM TOTAL VENTA
   final BehaviorSubject<String> _totalSales = BehaviorSubject<String>();
-  Stream<String> get outTotalSales => _totalSales.stream;
+  Stream<String> get outTotalSales =>
+      _totalSales.stream.transform(validateDecimal(translate));
   Function(String) get inTotalSales => _totalSales.sink.add;
 
   ///==================== STREAM COMENTARIO
   final BehaviorSubject<String> _commentary = BehaviorSubject<String>();
   Stream<String> get outCommentary =>
-      _commentary.stream.transform(validateName(translate));
+      _commentary.stream.transform(validateString(translate));
   Function(String) get inCommentary => _commentary.sink.add;
 
   ///==================== STREAM LISTA DE PRODUCTOS

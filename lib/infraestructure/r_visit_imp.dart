@@ -24,7 +24,7 @@ class RVisitImp implements RVisit {
               as List<dynamic>);
     } catch (e, st) {
       log(st.toString());
-      return Future.error('Tenemos problema al cargar productos');
+      return Future.error('Tenemos problema al cargar visitas');
     }
   }
 
@@ -41,7 +41,7 @@ class RVisitImp implements RVisit {
       return Future<bool>.value(true);
     } catch (e, st) {
       log(st.toString());
-      return Future.error('Tenemos problema al cargar productos');
+      return Future.error('Tenemos problema al crear visita');
     }
   }
 
@@ -57,7 +57,7 @@ class RVisitImp implements RVisit {
       return Future<bool>.value(true);
     } catch (e, st) {
       log(st.toString());
-      return Future.error('Tenemos problema al cargar productos');
+      return Future.error('Tenemos problema al eliminar visita');
     }
   }
 }

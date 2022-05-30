@@ -29,14 +29,31 @@ class _VSelectProductState extends State<VSelectProduct> {
       appBar: AppBar(
         title: const Text('Seleccinar Productos'),
       ),
-      body: SWListView<Product>(
-        data: _bloc.outProducts,
-        refresh: _bloc.getProducts,
-        scrollController: ScrollController(),
-        emptyMessage: 'No hay productos registrados',
-        initialData: const [],
-        currentIndex: () => 0.0,
-        itemWidget: getItem,
+      body: Column(
+        children: [
+          const SizedBox(
+            height: 12,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SWInput(
+              outData: _bloc.outQuery,
+              inData: _bloc.inQuery,
+              labelText: 'Buscar..',
+            ),
+          ),
+          Expanded(
+            child: SWListView<Product>(
+              data: _bloc.outProducts,
+              refresh: _bloc.getProducts,
+              scrollController: ScrollController(),
+              emptyMessage: 'No hay productos registrados',
+              initialData: const [],
+              currentIndex: () => 0.0,
+              itemWidget: getItem,
+            ),
+          ),
+        ],
       ),
     );
   }

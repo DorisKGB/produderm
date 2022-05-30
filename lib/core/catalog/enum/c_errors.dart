@@ -3,11 +3,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 enum CErrors {
   requiredField,
   invalidEmail,
-  invaliadPassword,
-  diferentPassword,
   invalidName,
   invalidNumber,
-  invalidDescription,
+  //invalidDescription,
 }
 
 extension CErrorsDetail on CErrors {
@@ -15,25 +13,16 @@ extension CErrorsDetail on CErrors {
     switch (this) {
       case CErrors.requiredField:
         //return translate.requiredField;
-        return 'vacio';
+        return 'El campo es requerido';
       case CErrors.invalidEmail:
         //return translate.requiredField;
-        return 'vacio';
-      case CErrors.invaliadPassword:
-        //return translate.requiredField;
-        return 'vacio';
+        return 'El campo es de tipo email';
       case CErrors.invalidName:
         //return translate.requiredField;
-        return 'vacio';
+        return 'Se requiere minimo 4 caracteres';
       case CErrors.invalidNumber:
         //return translate.requiredField;
-        return 'vacio';
-      case CErrors.invalidDescription:
-        //return translate.requiredField;
-        return 'vacio';
-      case CErrors.diferentPassword:
-        //return translate.requiredField;
-        return 'vacio';
+        return 'El campo es numerico';
     }
   }
 }

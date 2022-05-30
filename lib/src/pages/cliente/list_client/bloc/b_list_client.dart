@@ -10,23 +10,42 @@ import 'package:produderm/src/bloc_application/b_application.dart';
 import 'package:produderm/src/utils/bloc_pattern/bloc_base.dart';
 
 import '../../../../router/pages.dart';
-import '../../../visit/list_visit/bloc/b_list_visit.dart';
+import '../../../../utils/mixin/search_mixin.dart';
 
-class BListClient implements BlocBase {
+class BListClient with MixSearch implements BlocBase {
   BListClient(this._bApplication, this._rClient) {
     getClients();
+
+    initSearch(searchClient);
   }
+
+  List<Cliente>? listOld = [];
   final BApplication _bApplication;
   final RClient _rClient;
   final BehaviorSubject<List<Cliente>> _clients =
       BehaviorSubject<List<Cliente>>(); // Se crea el stream
-  Stream<List<Cliente>> get outClients => _clients.stream; // salida
+  Stream<List<Cliente>> get outClients => _clients.stream;
   Function(List<Cliente>) get inClients => _clients.sink.add;
   List<Cliente> get clientList => _clients.valueOrNull ?? [];
+
+  void searchClient(String queryVar) {
+    List<Cliente> lista = listOld!.where((element) {
+      if (element.firstName != null) {
+        return element.firstName!
+            .toLowerCase()
+            .contains(queryVar.toLowerCase());
+      } else {
+        return false;
+      }
+    }).toList();
+    inClients(lista);
+  }
+
   Future<void> getClients() async {
     try {
       List<Cliente> clientes = await _rClient.listClient();
       if (!_clients.isClosed) {
+        listOld = clientes;
         inClients(clientes);
       }
     } catch (e, st) {
@@ -69,6 +88,7 @@ class BListClient implements BlocBase {
   @override
   void dispose() {
     _clients.close();
+    disposeSearch();
   }
 
   @override

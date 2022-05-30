@@ -14,7 +14,7 @@ class Validators {
     return null;
   }
 
-  static CErrors? validatePassword(String? value) {
+  /*static CErrors? validatePassword(String? value) {
     if (!ValidatorUtils.isNotEmpty(value)) {
       return CErrors.requiredField;
     }
@@ -22,11 +22,23 @@ class Validators {
       return CErrors.invaliadPassword;
     }
     return null;
-  }
+  }*/
 
   static CErrors? validateName(String? value) {
     if (!ValidatorUtils.isNotEmpty(value)) {
       return CErrors.requiredField;
+    }
+
+    if (!ValidatorUtils.isValidName(value)) {
+      return CErrors.invalidName;
+    }
+
+    return null;
+  }
+
+  static CErrors? validateString(String? value) {
+    if (!ValidatorUtils.isNotEmpty(value)) {
+      return null;
     }
 
     if (!ValidatorUtils.isValidName(value)) {
@@ -48,7 +60,8 @@ class Validators {
 
   static CErrors? validateDecimal(String? value) {
     if (!ValidatorUtils.isNotEmpty(value)) {
-      return CErrors.requiredField;
+      return null;
+      //return CErrors.requiredField;
     }
     if (ValidatorUtils.isValidDecimal(value!)) {
       return CErrors.invalidNumber;
