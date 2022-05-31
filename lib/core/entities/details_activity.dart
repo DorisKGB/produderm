@@ -5,4 +5,11 @@ class DetailsVisit {
   Product? product;
   int? quantity;
   String? promotion;
+
+  double getTotalSales(){
+    if( quantity != null){
+      return (product!.pvf! * quantity!);
+    }
+    return 0.0;
+  }
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:go_router/go_router.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:rxdart/rxdart.dart';
@@ -27,6 +29,7 @@ class BAdmin with MixActionViewStream implements BlocBase {
     try {
       inAdmin(await _rAdmin.getAdmin());
     } catch (e, st) {
+      log(e.toString(),stackTrace: st);
       inView(MActionView.messageError(e.toString()));
     }
   }

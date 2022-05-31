@@ -1,3 +1,5 @@
+import 'package:produderm/core/entities/speciality.dart';
+
 import '../../../application/base/mapper.dart';
 import '../../../core/catalog/enum/c_cliente_type.dart';
 import '../../../core/catalog/enum/c_pharmacy_type.dart';
@@ -17,7 +19,7 @@ class EClienteFromData extends MapedorService<dynamic, Cliente> {
         ..lat = item['lat'] as String?
         ..lon = item['lon'] as String?
         ..type = clientcomCode(item['type'])
-        ..specialty = item['specialty'] as String?
+        ..specialty = Speciality()..code = item['specialty'] as String?
         ..email = item['email'] as String?
         ..phones = ((item['phones'] ?? []) as List<dynamic>)
             .map((e) => e.toString())
@@ -43,10 +45,10 @@ class EClienteToParams extends MapedorService<Cliente, Map<String, dynamic>> {
     params['lat'] = item.lat;
     params['lon'] = item.lon;
     params['type'] = item.type?.getTypeClient();
-    params['specialty'] = item.specialty;
     params['email'] = item.email;
     params['phones'] = item.phones;
     params['owner'] = item.owner;
+    params['specialty'] = item.specialty?.code;
     params['birthday'] =
         '${item.birthday?.year}-${item.birthday?.month}-${item.birthday?.day}';
     params['pharmacy_type'] = item.pharmacyType?.getPharmacyType();

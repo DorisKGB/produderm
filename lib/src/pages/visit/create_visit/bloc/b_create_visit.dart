@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:go_router/go_router.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
@@ -103,9 +105,19 @@ class BCreateVisit
       } else {
         inDetailVisit((detailList..add(detailsVisit)));
       }
+      calculateTotalSales();
     } catch (e, st) {
+      log(e.toString(),stackTrace: st);
       _detailVisit.addError(e.toString());
     }
+  }
+
+  void calculateTotalSales(){
+    if(detailList.isNotEmpty){
+      inTotalSales(detailList.map((e) => e.getTotalSales()).reduce((value, element) => value + element).toStringAsFixed(2));
+    }else{
+      inTotalSales('0.0');
+    }    
   }
 
   // envia a la vista para seleccionar los productos
@@ -116,6 +128,7 @@ class BCreateVisit
   void removeDetailVisit(int i) {
     detailList.removeAt(i);
     inDetailVisit(detailList);
+    calculateTotalSales();
   }
 
   Future<void> createDeleteVisit() async {
@@ -140,6 +153,7 @@ class BCreateVisit
       inButtonStatus(ButtonStatus.active);
       navigator.pop();
     } catch (e, st) {
+      log(e.toString(),stackTrace: st);
       inButtonStatus(ButtonStatus.active);
       inView(MActionView.messageError(e.toString()));
     }

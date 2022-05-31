@@ -14,7 +14,7 @@ class VListProduct extends StatefulWidget {
   State<VListProduct> createState() => _VListProductState();
 }
 
-class _VListProductState extends State<VListProduct> {
+class _VListProductState extends State<VListProduct> with AutomaticKeepAliveClientMixin {
   late BListProduct _bloc;
   @override
   void initState() {
@@ -24,6 +24,7 @@ class _VListProductState extends State<VListProduct> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Productos'),
@@ -62,4 +63,7 @@ class _VListProductState extends State<VListProduct> {
   Widget getItem(Product product, int index) {
     return SWItemProduct(data: product, index: index);
   }
+  
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:go_router/go_router.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:produderm/core/entities/details_activity.dart';
@@ -45,14 +47,20 @@ class BSelectProduct with MixSearch, MixActionViewStream implements BlocBase {
     inProducts(lista);
   }
 
-  Future<void> getProducts() async {
+  Future<void> getProducts({bool refresh=false}) async {
     try {
-      List<Product> productos = await _rProduct.listProduct();
+      if(refresh){
+        _bApplication.productos = null;  
+      }
+      List<Product> productos = _bApplication.productos ?? await _rProduct.listProduct();
+
       if (!_products.isClosed) {
         inProducts(productos);
         listOld = productos;
+        _bApplication.productos = productos;
       }
     } catch (e, st) {
+      log(e.toString(),stackTrace: st);
       _products.addError(e.toString());
     }
   }

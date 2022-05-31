@@ -42,6 +42,5 @@ class _SWItemProductState extends State<SWItemProduct> {
         onTap: widget.action,
       ),
     );
-    ;
   }
 }

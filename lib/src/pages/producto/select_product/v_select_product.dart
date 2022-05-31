@@ -45,7 +45,7 @@ class _VSelectProductState extends State<VSelectProduct> {
           Expanded(
             child: SWListView<Product>(
               data: _bloc.outProducts,
-              refresh: _bloc.getProducts,
+              refresh: () => _bloc.getProducts(refresh: true),
               scrollController: ScrollController(),
               emptyMessage: 'No hay productos registrados',
               initialData: const [],
@@ -72,8 +72,11 @@ class _VSelectProductState extends State<VSelectProduct> {
 
   Future<bool?> viewDialog(Product product) {
     return showDialog<bool?>(
+      
       context: context,
       builder: (BuildContext context) => AlertDialog(
+        contentPadding: const EdgeInsets.all(24),
+        insetPadding: const EdgeInsets.all(24),
         title: Text('${product.name}'),
         content: SWInput(
             inData: _bloc.inNumProduct,
@@ -89,7 +92,7 @@ class _VSelectProductState extends State<VSelectProduct> {
             onPressed: () => {
               if (_bloc.validateInput()) Navigator.pop(context, false),
             },
-            child: const Text('Agregar mas....'),
+            child: const Text('Agregar mas'),
           ),
           TextButton(
             onPressed: () => {

@@ -23,7 +23,7 @@ class RAdminImp implements RAdmin {
       return EAdminFromData()
           .transform(response.data['data'] as Map<String, dynamic>);
     } catch (e, st) {
-      log(e.toString());
+      log(e.toString(),stackTrace: st);
       return Future.error('Tenemos problema al cargar admin');
     }
   }

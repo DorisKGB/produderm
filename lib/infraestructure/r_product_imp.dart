@@ -21,6 +21,7 @@ class RProductImp implements RProduct {
           ((response.data as Map<String, dynamic>)['data'] ?? [])
               as List<dynamic>);
     } catch (e, st) {
+      log(e.toString(),stackTrace: st);
       return Future.error('Tenemos problema al cargar productos');
     }
   }

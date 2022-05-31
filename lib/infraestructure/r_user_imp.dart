@@ -20,6 +20,7 @@ class RUserImp implements RUser {
               Options(headers: <String, String>{'authorization': basicAuth}));
       return ELoginFromData().transform(response.data as Map<String, dynamic>);
     } catch (e, st) {
+      log(e.toString(),stackTrace: st);
       return Future.error('Tenemos problema al iniciar sesión');
     }
   }

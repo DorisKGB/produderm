@@ -6,13 +6,13 @@ import '../../utils/widgets/sw_button.dart';
 import 'bloc/b_admin.dart';
 
 class VAdmin extends StatefulWidget {
-  VAdmin({Key? key}) : super(key: key);
+  const VAdmin({Key? key}) : super(key: key);
 
   @override
   State<VAdmin> createState() => _VAdminState();
 }
 
-class _VAdminState extends State<VAdmin> {
+class _VAdminState extends State<VAdmin>  with AutomaticKeepAliveClientMixin{
   late BAdmin _bloc;
 
   @override
@@ -25,6 +25,7 @@ class _VAdminState extends State<VAdmin> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Card(
       elevation: 12,
       margin: const EdgeInsets.only(left: 30, right: 30, top: 100, bottom: 100),
@@ -112,4 +113,7 @@ class _VAdminState extends State<VAdmin> {
       ],
     );
   }
+  
+  @override
+  bool get wantKeepAlive => true;
 }
