@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:produderm/application/repository/r_client.dart';
 import 'package:produderm/core/entities/cliente.dart';
+import 'package:produderm/core/entities/speciality.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../../../core/catalog/enum/c_cliente_type.dart';
@@ -21,11 +22,13 @@ import '../../list_client/bloc/b_list_client.dart';
 class BCreateCliente
     with ManageButton, ValidatorTransForms, MixActionViewStream
     implements BlocBase {
+
   BCreateCliente(
     this._bApplication,
     this._rClient,
     this.parametros,
   ) {
+    getSpecialities();
     initManageButton([
       outCodigo,
       outNombre,
@@ -46,6 +49,8 @@ class BCreateCliente
       viewClient();
     }
   }
+
+
   final BApplication _bApplication;
   final RClient _rClient;
   final Map<String, dynamic> parametros;
@@ -128,6 +133,18 @@ class BCreateCliente
   CPharmacyType get pharmacyType =>
       _pharmacyType.valueOrNull ?? CPharmacyType.cadena; //OBTIENE EL VALOR
 
+
+  final BehaviorSubject<List<Speciality>> _specialities = BehaviorSubject<List<Speciality>>();
+  Stream<List<Speciality>> get outSpecialities =>
+      _specialities.stream;
+  Function(List<Speciality>) get inSpecialities => _specialities.sink.add;
+
+  final BehaviorSubject<Speciality> _speciality = BehaviorSubject<Speciality>();
+  Stream<Speciality> get outSpeciality  =>
+      _speciality.stream;
+  Function(Speciality) get inSpeciality  => _speciality.sink.add;
+
+
   void viewClient() {
     inCodigo(cliente!.code ?? '');
     inNombre(cliente!.firstName ?? '');
@@ -146,6 +163,9 @@ class BCreateCliente
     if (cliente?.owner != null && cliente?.owner != '') {
       inRepresentante(cliente!.owner!);
     }
+    if(cliente?.specialty != null){
+      inSpeciality(cliente!.specialty!);
+    }    
   }
 
   bool idIsNull() {
@@ -176,6 +196,7 @@ class BCreateCliente
       inView(MActionView.messageError('Se $mensage cliente'));
       navigator.pop();
     } catch (e, st) {
+      log(e.toString(),stackTrace: st);
       inButtonStatus(ButtonStatus.active);
       inView(MActionView.messageError(e.toString()));
     }
@@ -192,7 +213,8 @@ class BCreateCliente
       ..type = _clientType.valueOrNull
       ..phones = [_telefono.valueOrNull]
       ..owner = _representante.valueOrNull
-      ..birthday = _birthdayDate.valueOrNull;
+      ..birthday = _birthdayDate.valueOrNull
+      ..specialty = _speciality.valueOrNull;
     if (!idIsNull()) {
       cliente1.id = cliente!.id;
     }
@@ -200,6 +222,18 @@ class BCreateCliente
       cliente1.pharmacyType = _pharmacyType.valueOrNull;
     }
     return cliente1;
+  }
+
+  Future<void> getSpecialities() async{
+    try {
+      List<Speciality> specialities = _bApplication.specialities ?? await _rClient.getSpecialities();
+      if(specialities.isNotEmpty){
+         _bApplication.specialities =  specialities; 
+      }     
+      inSpecialities(specialities);
+    } catch (e, st) {
+      log(e.toString(),stackTrace: st);
+    }
   }
 
   @override
@@ -216,6 +250,8 @@ class BCreateCliente
     _clientType.close();
     _pharmacyType.close();
     closeManageButton();
+    _specialities.close();
+    _speciality.close();
   }
 
   @override

@@ -1,6 +1,8 @@
 import 'package:go_router/go_router.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:produderm/core/entities/product.dart';
+import 'package:produderm/core/entities/speciality.dart';
 
 import '../router/my_router.dart';
 import '../router/pages.dart';
@@ -16,6 +18,10 @@ class BApplication implements BlocBase {
   late MyRouter myRouter;
   late BSettings bSettings;
   AppLocalizations? localization;
+
+  List<Product>? productos;
+  List<Speciality>? specialities;
+  
   @override
   void dispose() {}
 

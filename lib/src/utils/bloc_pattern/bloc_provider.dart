@@ -18,7 +18,7 @@ class BlocProvider<T extends BlocBase> extends StatefulWidget {
   final bool blocSaved;
 
   @override
-  _BlocProviderState<T> createState() => _BlocProviderState<T>();
+  State<BlocProvider> createState() => _BlocProviderState<T>();
 
   static T of<T extends BlocBase>(BuildContext context) {
     _BlocProviderInherited<T>? provider = context

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:produderm/core/entities/visit.dart';
 
-import '../../core/entities/cliente.dart';
 import '../bloc_application/b_application.dart';
 import '../pages/cliente/create/bloc/p_create_cliente.dart';
 import '../pages/login/bloc/p_login.dart';

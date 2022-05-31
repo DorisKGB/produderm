@@ -13,7 +13,7 @@ class VListVisit extends StatefulWidget {
   State<VListVisit> createState() => _VListVisitState();
 }
 
-class _VListVisitState extends State<VListVisit> {
+class _VListVisitState extends State<VListVisit> with AutomaticKeepAliveClientMixin {
   late BListVisit _bloc;
   @override
   void initState() {
@@ -23,6 +23,7 @@ class _VListVisitState extends State<VListVisit> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Visitas'),
@@ -89,11 +90,14 @@ class _VListVisitState extends State<VListVisit> {
       context: context,
       initialDate: _bloc.date,
       firstDate: _bloc.firstDate,
-      lastDate: _bloc.date,
+      lastDate: DateTime.now(),
       fieldLabelText: 'Fecha de visita',
     );
     if (picked != null) {
       _bloc.filterByDate(picked);
     }
   }
+  
+  @override
+  bool get wantKeepAlive => true;
 }

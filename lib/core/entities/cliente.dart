@@ -1,3 +1,5 @@
+import 'package:produderm/core/entities/speciality.dart';
+
 import '../catalog/enum/c_cliente_type.dart';
 import '../catalog/enum/c_pharmacy_type.dart';
 
@@ -11,7 +13,7 @@ class Cliente {
   String? lat;
   String? lon;
   CTypeClient? type;
-  String? specialty;
+  Speciality? specialty;
   String? email;
   List<String?>? phones;
   String? owner;

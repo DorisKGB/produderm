@@ -12,7 +12,7 @@ class VListCliente extends StatefulWidget {
   State<VListCliente> createState() => _VListClienteState();
 }
 
-class _VListClienteState extends State<VListCliente> {
+class _VListClienteState extends State<VListCliente> with AutomaticKeepAliveClientMixin {
   late BListClient _bloc;
   @override
   void initState() {
@@ -22,6 +22,7 @@ class _VListClienteState extends State<VListCliente> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Clientes'),
@@ -115,4 +116,7 @@ class _VListClienteState extends State<VListCliente> {
       children: [Text(cliente.firstName!)],
     );*/
   }
+  
+  @override
+  bool get wantKeepAlive => true;
 }

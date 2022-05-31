@@ -4,8 +4,9 @@ class SWInputButton<T> extends StatelessWidget {
   final Stream<T> outData;
   final String hint;
   final dynamic action;
+  final IconData? icon;
   const SWInputButton(
-      {Key? key, required this.outData, required this.hint, this.action})
+      {Key? key, required this.outData, required this.hint, this.action, this.icon = Icons.arrow_drop_down})
       : super(key: key);
 
   @override
@@ -53,7 +54,7 @@ class SWInputButton<T> extends StatelessWidget {
                   child:
                       Text(hasdata ? texto! : hint, style: getStyle(hasdata)),
                 )),
-                const Icon(Icons.date_range, color: Colors.grey)
+                Icon(icon, color: Colors.grey)
               ],
             )),
         if (error != null && error.isNotEmpty)

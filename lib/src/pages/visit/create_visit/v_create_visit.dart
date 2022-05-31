@@ -122,12 +122,12 @@ class _VCreateVisitState extends State<VCreateVisit> {
         itemWidget: getItem,
         //getItem,
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: _bloc.idIsNull() ? FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          if (_bloc.idIsNull()) _bloc.addProduct();
+          _bloc.addProduct();
         },
-      ),
+      ) : null,
     );
   }
 

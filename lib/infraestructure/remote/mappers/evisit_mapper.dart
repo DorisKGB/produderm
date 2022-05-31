@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import '../../../application/base/mapper.dart';
 import '../../../core/entities/details_activity.dart';

@@ -126,7 +126,7 @@ class _SWListViewState<T> extends State<SWListView<T>> {
         onRefresh: widget.refresh,
         child: ListView(
           children: <Widget>[
-            Icon(
+            const Icon(
               Icons.sim_card_alert_outlined,
               size: 150,
             ),

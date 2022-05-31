@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:produderm/core/entities/speciality.dart';
 import 'package:produderm/src/pages/cliente/create/bloc/b_create_cliente.dart';
 import 'package:produderm/src/utils/bloc_pattern/bloc_provider.dart';
 import 'package:produderm/src/utils/widgets/sw_input.dart';
@@ -53,6 +54,12 @@ class _VCreateClenteState extends State<VCreateClente> {
               ),
               const SizedBox(height: 16),
               SWInput(
+                outData: _bloc.outRepresentante,
+                inData: _bloc.inRepresentante,
+                labelText: 'Farmacia (opcional)',
+              ),
+              const SizedBox(height: 16),
+              SWInput(
                 outData: _bloc.outNombre,
                 inData: _bloc.inNombre,
                 labelText: 'Nombres',
@@ -90,17 +97,12 @@ class _VCreateClenteState extends State<VCreateClente> {
                 textInputType: TextInputType.phone,
               ),
               const SizedBox(height: 16),
-              SWInput(
-                outData: _bloc.outRepresentante,
-                inData: _bloc.inRepresentante,
-                labelText: 'Representante (opcional)',
-              ),
-              const SizedBox(height: 16),
               SWInputButton<String>(
                 outData: _bloc.outBirthdayDate
                     .map((e) => _bloc.dateFormat.format(e)),
-                hint: "Fecha de cumpeaños",
+                hint: "Fecha de cumpleaños",
                 action: _selectDate,
+                icon: Icons.date_range,
               ),
               const SizedBox(height: 16),
               Row(
@@ -119,7 +121,11 @@ class _VCreateClenteState extends State<VCreateClente> {
                             .toList(),
                       );
                     } else {
-                      return Container();
+                       return  SWInputButton<String>(
+                        outData: _bloc.outSpeciality.map((event) => event.name??''),
+                        hint: 'Especialidad',
+                        action: onSelectSpeciality,
+                      );
                     }
                   }),
               const SizedBox(height: 16),
@@ -141,9 +147,11 @@ class _VCreateClenteState extends State<VCreateClente> {
         initialData: _bloc.clientType,
         builder: (context, snapshot) {
           return ListTile(
+            contentPadding: const EdgeInsets.all(0),
             title: Text(
               cTypeClient.getLabel(),
-              style: const TextStyle(fontSize: 12),
+              style: const TextStyle(fontSize: 16),
+              overflow: TextOverflow.ellipsis
             ),
             leading: Radio<CTypeClient>(
               value: cTypeClient,
@@ -162,8 +170,9 @@ class _VCreateClenteState extends State<VCreateClente> {
         initialData: _bloc.pharmacyType,
         builder: (context, snapshot) {
           return ListTile(
+            contentPadding: const EdgeInsets.all(0),
             title: Text(pharmacyType.getLabel(),
-                style: const TextStyle(fontSize: 12)),
+                style: const TextStyle(fontSize: 16), overflow: TextOverflow.ellipsis),
             leading: Radio<CPharmacyType>(
               value: pharmacyType,
               groupValue: snapshot.data,
@@ -181,10 +190,39 @@ class _VCreateClenteState extends State<VCreateClente> {
       initialDate: _bloc.initialDate,
       firstDate: _bloc.firstDate,
       lastDate: _bloc.lastDate,
-      fieldLabelText: 'Fecha de cumpeaños',
+      fieldLabelText: 'Fecha de cumpleaños',
     );
     if (picked != null && picked != _bloc.selectedDate) {
       _bloc.inBirthdayDate(picked); // = picked;
     }
+  }
+
+  void onSelectSpeciality() async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return StreamBuilder<List<Speciality>>(
+            initialData: const [],
+            stream: _bloc.outSpecialities,
+            builder: (context, snapshot) {
+              return SimpleDialog(
+                title: const Text('Selecione una especialidad'),
+                children: snapshot.data!
+                    .map<Widget>((Speciality item) => TextButton(
+                        style: ButtonStyle(
+                            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                const EdgeInsets.symmetric(vertical: 16))),
+                        onPressed: () {
+                          _bloc.inSpeciality(item);
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          item.name?? '',
+                        )))
+                    .toList(),
+              );
+            }
+          );
+        });
   }
 }

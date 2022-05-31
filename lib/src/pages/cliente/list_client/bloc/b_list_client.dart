@@ -49,6 +49,7 @@ class BListClient with MixSearch implements BlocBase {
         inClients(clientes);
       }
     } catch (e, st) {
+      log(e.toString(),stackTrace: st);
       _clients.addError(e.toString());
     }
   }
@@ -62,6 +63,7 @@ class BListClient with MixSearch implements BlocBase {
         inClients((clientList..add(addClient)));
       }
     } catch (e, st) {
+      log(e.toString(),stackTrace: st);
       _clients.addError(e.toString());
     }
   }

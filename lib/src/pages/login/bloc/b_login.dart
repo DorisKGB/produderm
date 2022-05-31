@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:produderm/application/repository/r_user.dart';
@@ -62,6 +64,7 @@ class BLogin
       }
       inButtonStatus(ButtonStatus.active);
     } catch (e, st) {
+      log(e.toString(),stackTrace: st);
       inView(MActionView.messageError(e.toString()));
       inButtonStatus(ButtonStatus.active);
     }

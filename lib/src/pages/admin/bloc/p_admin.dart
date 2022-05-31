@@ -15,7 +15,7 @@ class PAdmin extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<BAdmin>(
       blocBuilder: () => BAdmin(bApplication, rAdmin),
-      child: VAdmin(),
+      child: const VAdmin(),
     );
   }
 }
