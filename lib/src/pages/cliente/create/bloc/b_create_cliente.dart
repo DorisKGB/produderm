@@ -23,7 +23,6 @@ import '../../list_client/bloc/b_list_client.dart';
 class BCreateCliente
     with ManageButton, ValidatorTransForms, MixActionViewStream
     implements BlocBase {
-
   BCreateCliente(
     this._bApplication,
     this._rClient,
@@ -41,8 +40,10 @@ class BCreateCliente
       outBirthdayDate,
       //outPharmacyType,
     ]);
+    //Se llenan las variables para controlar si es actualizacion o creacion
     cliente = parametros['client'];
     _bListClient = parametros['bloc'];
+    log((cliente?.specialty).toString());
     if (idIsNull()) {
       inClientType(CTypeClient.farmacia);
       inPharmacyType(CPharmacyType.cadena);
@@ -50,7 +51,6 @@ class BCreateCliente
       viewClient();
     }
   }
-
 
   final BApplication _bApplication;
   final RClient _rClient;
@@ -134,17 +134,14 @@ class BCreateCliente
   CPharmacyType get pharmacyType =>
       _pharmacyType.valueOrNull ?? CPharmacyType.cadena; //OBTIENE EL VALOR
 
-
-  final BehaviorSubject<List<Speciality>> _specialities = BehaviorSubject<List<Speciality>>();
-  Stream<List<Speciality>> get outSpecialities =>
-      _specialities.stream;
+  final BehaviorSubject<List<Speciality>> _specialities =
+      BehaviorSubject<List<Speciality>>();
+  Stream<List<Speciality>> get outSpecialities => _specialities.stream;
   Function(List<Speciality>) get inSpecialities => _specialities.sink.add;
 
   final BehaviorSubject<Speciality> _speciality = BehaviorSubject<Speciality>();
-  Stream<Speciality> get outSpeciality  =>
-      _speciality.stream;
-  Function(Speciality) get inSpeciality  => _speciality.sink.add;
-
+  Stream<Speciality> get outSpeciality => _speciality.stream;
+  Function(Speciality) get inSpeciality => _speciality.sink.add;
 
   void viewClient() {
     inCodigo(cliente!.code ?? '');
@@ -175,16 +172,16 @@ class BCreateCliente
     }
   }
 
-  setSpeciality(){
-    if(cliente?.specialty?.code != null){
-      if(_specialities.valueOrNull != null){        
-        Speciality? speciality = _specialities.value.firstWhereOrNull((element) => element.code ==  cliente!.specialty!.code!);
-        if(speciality != null){
+  setSpeciality() {
+    if (cliente?.specialty?.code != null) {
+      if (_specialities.valueOrNull != null) {
+        Speciality? speciality = _specialities.value.firstWhereOrNull(
+            (element) => element.code == cliente!.specialty!.code!);
+        if (speciality != null) {
           inSpeciality(speciality);
-        }        
+        }
       }
-      
-    }  
+    }
   }
 
 //metodo para guardar o actualizar cliente
@@ -207,7 +204,7 @@ class BCreateCliente
       inView(MActionView.messageError('Se $mensage cliente'));
       navigator.pop();
     } catch (e, st) {
-      log(e.toString(),stackTrace: st);
+      log(e.toString(), stackTrace: st);
       inButtonStatus(ButtonStatus.active);
       inView(MActionView.messageError(e.toString()));
     }
@@ -235,16 +232,19 @@ class BCreateCliente
     return cliente1;
   }
 
-  Future<void> getSpecialities() async{
+  Future<void> getSpecialities() async {
     try {
-      List<Speciality> specialities = _bApplication.specialities ?? await _rClient.getSpecialities();
-      if(specialities.isNotEmpty){
-         _bApplication.specialities =  specialities;
-         setSpeciality();
-      }     
+      List<Speciality> specialities =
+          _bApplication.specialities ?? await _rClient.getSpecialities();
+      if (specialities.isNotEmpty) {
+        _bApplication.specialities = specialities;
+        setSpeciality();
+        inSpeciality(specialities.firstWhere((e) => e.code == "MEG",
+            orElse: () => specialities.first));
+      }
       inSpecialities(specialities);
     } catch (e, st) {
-      log(e.toString(),stackTrace: st);
+      log(e.toString(), stackTrace: st);
     }
   }
 
