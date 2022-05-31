@@ -19,7 +19,7 @@ class EClienteFromData extends MapedorService<dynamic, Cliente> {
         ..lat = item['lat'] as String?
         ..lon = item['lon'] as String?
         ..type = clientcomCode(item['type'])
-        ..specialty = Speciality()..code = item['specialty'] as String?
+        ..specialty = (Speciality()..code = item['specialty'] as String?)
         ..email = item['email'] as String?
         ..phones = ((item['phones'] ?? []) as List<dynamic>)
             .map((e) => e.toString())

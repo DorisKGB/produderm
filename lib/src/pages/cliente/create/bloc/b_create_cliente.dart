@@ -7,6 +7,7 @@ import 'package:produderm/application/repository/r_client.dart';
 import 'package:produderm/core/entities/cliente.dart';
 import 'package:produderm/core/entities/speciality.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:collection/collection.dart';
 
 import '../../../../../core/catalog/enum/c_cliente_type.dart';
 import '../../../../../core/catalog/enum/c_pharmacy_type.dart';
@@ -115,7 +116,7 @@ class BCreateCliente
   DateFormat dateFormat = DateFormat.yMMMd();
   DateTime initialDate = DateTime.now();
   DateTime get firstDate =>
-      (initialDate.add(const Duration(days: -(365 * 18))));
+      (initialDate.add(const Duration(days: -(365 * 120))));
   DateTime get lastDate => initialDate;
 //==================== STREAM TIPO CLIENTE
   final BehaviorSubject<CTypeClient> _clientType =
@@ -163,9 +164,7 @@ class BCreateCliente
     if (cliente?.owner != null && cliente?.owner != '') {
       inRepresentante(cliente!.owner!);
     }
-    if(cliente?.specialty != null){
-      inSpeciality(cliente!.specialty!);
-    }    
+    setSpeciality();
   }
 
   bool idIsNull() {
@@ -174,6 +173,18 @@ class BCreateCliente
     } else {
       return false;
     }
+  }
+
+  setSpeciality(){
+    if(cliente?.specialty?.code != null){
+      if(_specialities.valueOrNull != null){        
+        Speciality? speciality = _specialities.value.firstWhereOrNull((element) => element.code ==  cliente!.specialty!.code!);
+        if(speciality != null){
+          inSpeciality(speciality);
+        }        
+      }
+      
+    }  
   }
 
 //metodo para guardar o actualizar cliente
@@ -228,7 +239,8 @@ class BCreateCliente
     try {
       List<Speciality> specialities = _bApplication.specialities ?? await _rClient.getSpecialities();
       if(specialities.isNotEmpty){
-         _bApplication.specialities =  specialities; 
+         _bApplication.specialities =  specialities;
+         setSpeciality();
       }     
       inSpecialities(specialities);
     } catch (e, st) {
