@@ -24,7 +24,7 @@ class RVisitImp implements RVisit {
               as List<dynamic>);
     } catch (e, st) {
       log(st.toString());
-      return Future.error('Tenemos problema al cargar productos');
+      return Future.error('Tenemos problema al cargar visitas');
     }
   }
 
@@ -41,7 +41,23 @@ class RVisitImp implements RVisit {
       return Future<bool>.value(true);
     } catch (e, st) {
       log(st.toString());
-      return Future.error('Tenemos problema al cargar productos');
+      return Future.error('Tenemos problema al crear visita');
+    }
+  }
+
+  @override
+  Future<bool> deleteVisit(Visit visit) async {
+    try {
+      final String basicAuth = 'Bearer ${(await rUserLocal.getToken()).token}';
+      Response<dynamic> response = await Dio().delete(
+        '${EndPoint.visits.getPath()}/${visit.id}',
+        options: Options(headers: <String, String>{'authorization': basicAuth}),
+      );
+      log(response.toString());
+      return Future<bool>.value(true);
+    } catch (e, st) {
+      log(st.toString());
+      return Future.error('Tenemos problema al eliminar visita');
     }
   }
 }

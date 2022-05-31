@@ -1,5 +1,4 @@
 class ValidatorUtils {
-
   static bool isValidName(String? name) {
     if (name != null && name.length > 3) {
       return true;
@@ -26,18 +25,18 @@ class ValidatorUtils {
   }
 
   static bool isValidEmail(String email) {
-    return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
+    return RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(email);
   }
 
   static bool isValidNumber(String num) {
     int? number = int.tryParse(num);
     return number == null;
-    
   }
 
   static bool isValidDecimal(String num) {
     double? number = double.tryParse(num);
-    return number == null;  
+    return number == null;
   }
-
 }

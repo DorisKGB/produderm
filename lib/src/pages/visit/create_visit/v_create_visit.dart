@@ -36,7 +36,7 @@ class _VCreateVisitState extends State<VCreateVisit> {
               Tab(icon: Icon(Icons.medical_services)),
             ],
           ),
-          title: const Text('Registro actividad'),
+          title: Text('${_bloc.nameLabel} visita'),
         ),
         body: Column(
           children: [
@@ -50,26 +50,15 @@ class _VCreateVisitState extends State<VCreateVisit> {
             ),
             SWButton.elevated(
               streamStatus: _bloc.outButtonStatus,
-              onPressed: _bloc.createVisit,
-              child: const Text('Registrar Visita'),
+              onPressed: _bloc.createDeleteVisit,
+              child: Text('${_bloc.nameLabel} visita'),
             )
           ],
         ),
-
-        /*bottomSheet: SWButton.elevated(
-          streamStatus: _bloc.outButtonStatus,
-          onPressed: _bloc.createVisit,
-          child: const Text('Registrar Visita'),
-        ),*/
       ),
     );
   }
 
-/*            SWButton.elevated(
-              streamStatus: _bloc.outButtonStatus,
-              onPressed: _bloc.createVisit,
-              child: const Text('Registrar Visita'),
-            )*/
   Widget registrarVisita() {
     return Padding(
       padding: const EdgeInsets.all(20),
@@ -95,22 +84,25 @@ class _VCreateVisitState extends State<VCreateVisit> {
           SWInput(
             outData: _bloc.outTotalCharge,
             inData: _bloc.inTotalCharge,
-            labelText: 'Total Cobro',
+            labelText: 'Total Cobro  (opcional)',
             textInputType: TextInputType.number,
+            isEnable: _bloc.idIsNull(),
           ),
           const SizedBox(height: 16),
           SWInput(
             outData: _bloc.outTotalSales,
             inData: _bloc.inTotalSales,
-            labelText: 'Total Ventas',
+            labelText: 'Total Ventas  (opcional)',
             textInputType: TextInputType.number,
+            isEnable: _bloc.idIsNull(),
           ),
           const SizedBox(height: 16),
           SWInput(
             outData: _bloc.outCommentary,
             inData: _bloc.inCommentary,
-            labelText: 'Comentarios',
+            labelText: 'Comentarios  (opcional)',
             textInputType: TextInputType.name,
+            isEnable: _bloc.idIsNull(),
           ),
         ],
       ),
@@ -133,7 +125,7 @@ class _VCreateVisitState extends State<VCreateVisit> {
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
-          _bloc.addProduct();
+          if (_bloc.idIsNull()) _bloc.addProduct();
         },
       ),
     );
@@ -155,7 +147,7 @@ class _VCreateVisitState extends State<VCreateVisit> {
             trailing: IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () {
-                _bloc.removeDetailVisit(index);
+                if (_bloc.idIsNull()) _bloc.removeDetailVisit(index);
               },
             ),
           ),

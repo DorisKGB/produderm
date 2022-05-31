@@ -15,7 +15,7 @@ mixin ValidatorTransForms {
             : skin.addError(error.getDescription(translate));
       });
 
-  StreamTransformer<String, String> validatePassword(
+  /*StreamTransformer<String, String> validatePassword(
           AppLocalizations translate) =>
       StreamTransformer<String, String>.fromHandlers(
           handleData: (String value, EventSink<String> skin) {
@@ -23,12 +23,21 @@ mixin ValidatorTransForms {
         (error == null)
             ? skin.add(value)
             : skin.addError(error.getDescription(translate));
-      });
+      });*/
 
   StreamTransformer<String, String> validateName(AppLocalizations translate) =>
       StreamTransformer<String, String>.fromHandlers(
           handleData: (String value, EventSink<String> skin) {
         final CErrors? error = Validators.validateName(value);
+        (error == null)
+            ? skin.add(value)
+            : skin.addError(error.getDescription(translate));
+      });
+  StreamTransformer<String, String> validateString(
+          AppLocalizations translate) =>
+      StreamTransformer<String, String>.fromHandlers(
+          handleData: (String value, EventSink<String> skin) {
+        final CErrors? error = Validators.validateString(value);
         (error == null)
             ? skin.add(value)
             : skin.addError(error.getDescription(translate));

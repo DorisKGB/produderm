@@ -16,24 +16,29 @@ import '../../../../utils/mixin/action_view_screen.dart';
 import '../../../../utils/mixin/manage_button.dart';
 import '../../../../utils/validators/validator_transforms.dart';
 import '../../../../utils/widgets/sw_button.dart';
+import '../../list_client/bloc/b_list_client.dart';
 
 class BCreateCliente
     with ManageButton, ValidatorTransForms, MixActionViewStream
     implements BlocBase {
-  BCreateCliente(this._bApplication, this._rClient, this.cliente) {
+  BCreateCliente(
+    this._bApplication,
+    this._rClient,
+    this.parametros,
+  ) {
     initManageButton([
       outCodigo,
       outNombre,
-      outApellido,
       outCallePrincipal,
       outCalleSecundaria,
       outEmail,
       outTelefono,
-      outRepresentante,
-      outBirthdayDate,
       outClientType,
+      outBirthdayDate,
       //outPharmacyType,
     ]);
+    cliente = parametros['client'];
+    _bListClient = parametros['bloc'];
     if (idIsNull()) {
       inClientType(CTypeClient.farmacia);
       inPharmacyType(CPharmacyType.cadena);
@@ -43,12 +48,14 @@ class BCreateCliente
   }
   final BApplication _bApplication;
   final RClient _rClient;
-  final Cliente? cliente;
+  final Map<String, dynamic> parametros;
+  Cliente? cliente;
+  BListClient? _bListClient;
 
   ///==================== STREAM CODIGO
   final BehaviorSubject<String> _codigo = BehaviorSubject<String>();
   Stream<String> get outCodigo =>
-      _codigo.stream.transform(validateName(translate));
+      _codigo.stream.transform(validateNumber(translate));
   Function(String) get inCodigo => _codigo.sink.add;
 
   ///==================== STREAM NOMBRE
@@ -60,7 +67,7 @@ class BCreateCliente
   ///==================== STREAM APELLIDO
   final BehaviorSubject<String> _apellido = BehaviorSubject<String>();
   Stream<String> get outApellido =>
-      _apellido.stream.transform(validateName(translate));
+      _apellido.stream.transform(validateString(translate));
   Function(String) get inApellido => _apellido.sink.add;
 
   ///==================== STREAM CALLE PRINCIPAL
@@ -84,13 +91,13 @@ class BCreateCliente
   ///==================== STREAM TELEFONO
   final BehaviorSubject<String> _telefono = BehaviorSubject<String>();
   Stream<String> get outTelefono =>
-      _telefono.stream.transform(validateName(translate));
+      _telefono.stream.transform(validateNumber(translate));
   Function(String) get inTelefono => _telefono.sink.add;
 
   ///==================== STREAM REPRESENTANTE
   final BehaviorSubject<String> _representante = BehaviorSubject<String>();
   Stream<String> get outRepresentante =>
-      _representante.stream.transform(validateName(translate));
+      _representante.stream.transform(validateString(translate));
   Function(String) get inRepresentante => _representante.sink.add;
 
   ///==================== STREAM  y VARIABLES FECHA CUMPLE
@@ -124,16 +131,20 @@ class BCreateCliente
   void viewClient() {
     inCodigo(cliente!.code ?? '');
     inNombre(cliente!.firstName ?? '');
-    inApellido(cliente!.lastName ?? '');
     inCallePrincipal(cliente!.principalAddress ?? '');
     inCalleSecundaria(cliente!.secondaryAddress ?? '');
     inEmail(cliente!.email ?? '');
     inTelefono(cliente!.phones?.first ?? '');
-    inRepresentante(cliente!.owner ?? '');
     inBirthdayDate(cliente!.birthday ?? initialDate);
     inClientType(cliente!.type ?? CTypeClient.medico);
     if (cliente?.type == CTypeClient.farmacia) {
       inPharmacyType(cliente!.pharmacyType!);
+    }
+    if (cliente?.lastName != null && cliente?.lastName != '') {
+      inApellido(cliente!.lastName!);
+    }
+    if (cliente?.owner != null && cliente?.owner != '') {
+      inRepresentante(cliente!.owner!);
     }
   }
 
@@ -152,11 +163,13 @@ class BCreateCliente
     try {
       inButtonStatus(ButtonStatus.progress);
       if (idIsNull()) {
-        await _rClient.createClient(cliente1);
+        Cliente res = await _rClient.createClient(cliente1);
         mensage = 'creo';
+        _bListClient?.addClienteList(res);
       } else {
         await _rClient.updateClient(cliente1);
         mensage = 'actualizó';
+        _bListClient?.getClients();
       }
       // Para activar el boton
       inButtonStatus(ButtonStatus.active);

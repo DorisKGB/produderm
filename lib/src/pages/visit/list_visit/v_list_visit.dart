@@ -3,6 +3,7 @@ import 'package:produderm/core/entities/visit.dart';
 import 'package:produderm/src/pages/visit/list_visit/bloc/b_list_visit.dart';
 
 import '../../../utils/bloc_pattern/bloc_provider.dart';
+import '../../../utils/widgets/sw_input.dart';
 import '../../../utils/widgets/sw_list_view.dart';
 
 class VListVisit extends StatefulWidget {
@@ -25,17 +26,37 @@ class _VListVisitState extends State<VListVisit> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Visitas'),
+        actions: [
+          IconButton(onPressed: _selectDate, icon: const Icon(Icons.date_range))
+        ],
       ),
-      body: SWListView<Visit>(
-        data: _bloc.outVisits,
-        refresh: () => _bloc.getVisits(_bloc.date),
-        //showDivider: true,
-        scrollController: ScrollController(),
-        emptyMessage: 'No hay visitas registradas registrados',
-        initialData: const [],
-        currentIndex: () => 0.0,
-        itemWidget: getItem,
-        //getItem,
+      body: Column(
+        children: [
+          const SizedBox(
+            height: 12,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SWInput(
+              outData: _bloc.outQuery,
+              inData: _bloc.inQuery,
+              labelText: 'Buscar..',
+            ),
+          ),
+          Expanded(
+            child: SWListView<Visit>(
+              data: _bloc.outVisits,
+              refresh: () => _bloc.getVisits(_bloc.date),
+              //showDivider: true,
+              scrollController: ScrollController(),
+              emptyMessage: 'No hay visitas registradas registrados',
+              initialData: const [],
+              currentIndex: () => 0.0,
+              itemWidget: getItem,
+              //getItem,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -47,7 +68,8 @@ class _VListVisitState extends State<VListVisit> {
       child: ListTile(
           minVerticalPadding: 12,
           //isThreeLine: true,
-          title: Text('${visit.cliente?.firstName} ${visit.cliente?.lastName}',
+          title: Text(
+              '${visit.cliente?.firstName} ${visit.cliente?.lastName ?? ''}',
               style:
                   const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
           subtitle: Column(
@@ -57,7 +79,21 @@ class _VListVisitState extends State<VListVisit> {
               Text('Productos Entregados: ${(visit.details?.length)}'),
             ],
           ),
-          trailing: Text(_bloc.dateFormat.format(_bloc.date))),
+          trailing: Text(_bloc.dateFormat.format(_bloc.date)),
+          onTap: () => {_bloc.viewVisit(visit)}),
     );
+  }
+
+  Future<void> _selectDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _bloc.date,
+      firstDate: _bloc.firstDate,
+      lastDate: _bloc.date,
+      fieldLabelText: 'Fecha de visita',
+    );
+    if (picked != null) {
+      _bloc.filterByDate(picked);
+    }
   }
 }

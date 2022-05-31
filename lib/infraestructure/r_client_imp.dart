@@ -28,18 +28,18 @@ class RClientImp implements RClient {
   }
 
   @override
-  Future<bool> createClient(Cliente cliente) async {
+  Future<Cliente> createClient(Cliente cliente) async {
     try {
       final String basicAuth = 'Bearer ${(await rUserLocal.getToken()).token}';
       Response<dynamic> response = await Dio().post(EndPoint.clients.getPath(),
           options:
               Options(headers: <String, String>{'authorization': basicAuth}),
           data: EClienteToParams().transform(cliente));
-      log(response.toString());
-      return Future<bool>.value(true);
+      return Future<Cliente>.value(
+          EClienteFromData().transform((response.data['data'])));
     } catch (e, st) {
       log(st.toString());
-      return Future<bool>.error('Tenemos problema al crear cliente');
+      return Future<Cliente>.error('Tenemos problema al crear cliente');
     }
   }
 

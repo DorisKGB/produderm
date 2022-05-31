@@ -9,13 +9,17 @@ import '../../../../bloc_application/b_application.dart';
 import '../../../../models/m_action_view.dart';
 import '../../../../utils/bloc_pattern/bloc_base.dart';
 import '../../../../utils/mixin/action_view_screen.dart';
+import '../../../../utils/mixin/search_mixin.dart';
 import '../../../visit/create_visit/bloc/b_create_visit.dart';
 
-class BSelectProduct with MixActionViewStream implements BlocBase {
+class BSelectProduct with MixSearch, MixActionViewStream implements BlocBase {
   BSelectProduct(this._bApplication, this._rProduct, this.bCreateVisit) {
     getProducts();
     inNumProduct('');
+    initSearch(searchProduct);
   }
+
+  List<Product>? listOld = [];
   final BApplication _bApplication;
   final RProduct _rProduct;
   final BCreateVisit bCreateVisit;
@@ -30,11 +34,23 @@ class BSelectProduct with MixActionViewStream implements BlocBase {
   Function(String) get inNumProduct => _numProduct.sink.add;
   String get numProduct => _numProduct.valueOrNull ?? '';
 
+  void searchProduct(String queryVar) {
+    List<Product> lista = listOld!.where((element) {
+      if (element.name != null) {
+        return element.name!.toLowerCase().contains(queryVar.toLowerCase());
+      } else {
+        return false;
+      }
+    }).toList();
+    inProducts(lista);
+  }
+
   Future<void> getProducts() async {
     try {
       List<Product> productos = await _rProduct.listProduct();
       if (!_products.isClosed) {
         inProducts(productos);
+        listOld = productos;
       }
     } catch (e, st) {
       _products.addError(e.toString());
@@ -66,6 +82,7 @@ class BSelectProduct with MixActionViewStream implements BlocBase {
   void dispose() {
     _products.close();
     _numProduct.close();
+    disposeSearch();
   }
 
   @override

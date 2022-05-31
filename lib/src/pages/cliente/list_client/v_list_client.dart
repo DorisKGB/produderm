@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:produderm/core/entities/cliente.dart';
 import 'package:produderm/src/pages/cliente/list_client/bloc/b_list_client.dart';
 import 'package:produderm/src/utils/bloc_pattern/bloc_provider.dart';
+import 'package:produderm/src/utils/widgets/sw_input.dart';
 import 'package:produderm/src/utils/widgets/sw_list_view.dart';
 
 class VListCliente extends StatefulWidget {
@@ -25,16 +26,33 @@ class _VListClienteState extends State<VListCliente> {
       appBar: AppBar(
         title: const Text('Clientes'),
       ),
-      body: SWListView<Cliente>(
-        data: _bloc.outClients,
-        refresh: _bloc.getClients,
-        //showDivider: true,
-        scrollController: ScrollController(),
-        emptyMessage: 'No hay clientes registrados',
-        initialData: const [],
-        currentIndex: () => 0.0,
-        itemWidget: getItem,
-        //getItem,
+      body: Column(
+        children: [
+          const SizedBox(
+            height: 12,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SWInput(
+              outData: _bloc.outQuery,
+              inData: _bloc.inQuery,
+              labelText: 'Buscar..',
+            ),
+          ),
+          Expanded(
+            child: SWListView<Cliente>(
+              data: _bloc.outClients,
+              refresh: _bloc.getClients,
+              //showDivider: true,
+              scrollController: ScrollController(),
+              emptyMessage: 'No hay clientes registrados',
+              initialData: const [],
+              currentIndex: () => 0.0,
+              itemWidget: getItem,
+              //getItem,
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
@@ -53,7 +71,7 @@ class _VListClienteState extends State<VListCliente> {
         minVerticalPadding: 12,
         //isThreeLine: true,
         title: Text(
-            '${cliente.code} - ${cliente.firstName} ${cliente.lastName}',
+            '${cliente.code} - ${cliente.firstName} ${cliente.lastName ?? ''}',
             style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
