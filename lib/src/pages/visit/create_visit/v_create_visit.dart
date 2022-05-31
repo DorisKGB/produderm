@@ -122,12 +122,14 @@ class _VCreateVisitState extends State<VCreateVisit> {
         itemWidget: getItem,
         //getItem,
       ),
-      floatingActionButton: _bloc.idIsNull() ? FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          _bloc.addProduct();
-        },
-      ) : null,
+      floatingActionButton: _bloc.idIsNull()
+          ? FloatingActionButton(
+              child: const Icon(Icons.add),
+              onPressed: () {
+                _bloc.addProduct();
+              },
+            )
+          : null,
     );
   }
 
@@ -144,12 +146,14 @@ class _VCreateVisitState extends State<VCreateVisit> {
                 style:
                     const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
             subtitle: Text('Cantidad: ${detailVisit.quantity}'),
-            trailing: IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () {
-                if (_bloc.idIsNull()) _bloc.removeDetailVisit(index);
-              },
-            ),
+            trailing: _bloc.idIsNull()
+                ? IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      _bloc.removeDetailVisit(index);
+                    },
+                  )
+                : null,
           ),
         ],
       ),
