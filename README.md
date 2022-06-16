@@ -29,5 +29,5 @@ Se encuentra los modelos que se utilizaran en la aplicación móvil
 ### Infraestructura
 Se encuentra la implementación de las clases abstractas declaradas en la capa de aplicación.
 ### Src
-Se encuentra las rutas de vistas, widget reutilizables, lógica de negocio y vista de la aplicación móvil
+Se encuentra las rutas de vistas, widgets reutilizables, lógica de negocio y vista de la aplicación móvil
 
