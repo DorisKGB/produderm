@@ -5,15 +5,13 @@ aplication
   - base
   - repository
 core
-  - catalog
   - entities
 infraestructure
   - local
     - mappers
   - remote
     - api
-    - mappers
-    - model
+    - mappers    
 src
   - bloc_aplication
     - blocs
@@ -25,10 +23,11 @@ src
   - utils
 
 ### Aplication
-Se encuentra definida la estructura de los archivos que se comunicaran con web service a traves de clases abtractas
+Se encuentra definida la estructura de los archivos que se comunicaran con web service a través de clases abtractas
 ### Core
-Se encuenra los modelos que se utilizaran en la aplicacion movil
+Se encuentra los modelos que se utilizaran en la aplicación móvil
 ### Infraestructura
-Se encuentra la implementacion de las clases abtactas declaradas en la capa de aplicacion.
+Se encuentra la implementación de las clases abstractas declaradas en la capa de aplicación.
 ### Src
-Se encuentra las rutas de vistas, logica de negocio y vista de la aplicacion movil
+Se encuentra las rutas de vistas, widget reutilizables, lógica de negocio y vista de la aplicación móvil
+
